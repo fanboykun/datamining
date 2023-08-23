@@ -1,10 +1,8 @@
-# Very short description of the package
+# Data Mining Method Calculation On PHP
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/fanboykun/datamining.svg?style=flat-square)](https://packagist.org/packages/fanboykun/datamining)
 [![Total Downloads](https://img.shields.io/packagist/dt/fanboykun/datamining.svg?style=flat-square)](https://packagist.org/packages/fanboykun/datamining)
-![GitHub Actions](https://github.com/fanboykun/datamining/actions/workflows/main.yml/badge.svg)
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+This package provide calculation of datamining Algorithm, Current Algorithm that can be used is KMeans, C45 on working.
 
 ## Installation
 
@@ -15,15 +13,57 @@ composer require fanboykun/datamining
 ```
 
 ## Usage
-
+Use the class
 ```php
-// Usage description here
+use Fanboykun\Datamining\Datamining
+```
+### In this example, we going to use KMeans
+
+example of the data go give
+```php
+$points = Study::all()->map(function ($study, $k) {
+        return [
+            'key' => $study->student_id,
+            'val' => [
+            $study->matematika,
+            $study->fisika,
+            $study->kimia,
+            $study->biologi,
+            $study->sejarah,
+            $study->akuntansi,
+            $study->sosiologi,
+            $study->geografi,
+            ],
+        ];
+    })->toArray();
+```
+use one of the available method, init the custructor
+```php
+// example, we use KMeans, init with desired space (data example above)
+$space = (new Datamining)->initKMeans(8)
 ```
 
-### Testing
+add all point into space
+```php
+// give the array of the data as the point to insert into space as the first parameter
+// give the key of the points(data to calculate) as the second parameter
+// give to value of the data to calculate as the third parameter
+ $space->addAllPointToSpace($points, 'key', 'val');
+```
 
-```bash
-composer test
+execute the calulation
+```php
+// the required arguments are :
+
+// the number of the cluster you want to set
+// int $numberOfCluster
+
+// the initialization method (set to 3 for set the first centroid manually)
+// $initMethod = 1
+
+// give the index of the array of the points you want set as the first centroid
+// $selectedPoints = []
+$dataset = $space->solveWithIterationCallback(2, 3, [0,1]);
 ```
 
 ### Changelog
@@ -41,12 +81,7 @@ If you discover any security related issues, please email irfanramadhan1812@gmai
 ## Credits
 
 -   [fanboykun](https://github.com/fanboykun)
--   [All Contributors](../../contributors)
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information
